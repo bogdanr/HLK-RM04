@@ -1,0 +1,2 @@
+#!/bin/sh
+echo ${BUTTON} > /tmp/failsafe_button

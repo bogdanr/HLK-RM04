@@ -1,0 +1,23 @@
+--- a/extra/Configs/Config.in
++++ b/extra/Configs/Config.in
+@@ -235,6 +235,9 @@ config TARGET_SUBARCH
+ 	default "i486" if CONFIG_486
+ 	default "i586" if CONFIG_586 || CONFIG_586MMX
+ 	default "i686" if TARGET_ARCH = "i386"
++	default "mips" if CONFIG_MIPS_N32_ABI
++	default "mips" if CONFIG_MIPS_O32_ABI
++	default "mips64" if CONFIG_MIPS_N64_ABI
+ 	default ""
+ 
+ source "extra/Configs/Config.in.arch"
+--- a/Rules.mak
++++ b/Rules.mak
+@@ -118,7 +118,7 @@ export MAJOR_VERSION MINOR_VERSION SUBLE
+ LIBC := libc
+ SHARED_LIBNAME := $(LIBC).so.$(ABI_VERSION)
+ UBACKTRACE_DSO := libubacktrace.so.$(ABI_VERSION)
+-ifneq ($(findstring  $(TARGET_ARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 ),)
++ifneq ($(strip $(findstring  $(TARGET_SUBARCH) , hppa64 ia64 mips64 powerpc64 s390x sparc64 x86_64 )),)
+ UCLIBC_LDSO_NAME := ld64-uClibc
+ ARCH_NATIVE_BIT := 64
+ else

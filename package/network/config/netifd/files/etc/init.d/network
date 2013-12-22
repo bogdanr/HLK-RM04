@@ -1,0 +1,57 @@
+#!/bin/sh /etc/rc.common
+
+START=20
+STOP=90
+
+USE_PROCD=1
+
+start_service() {
+	[ -e /proc/sys/kernel/core_pattern ] && {
+		ulimit -c unlimited
+		echo '/tmp/%e.%p.%s.%t.core' > /proc/sys/kernel/core_pattern
+	}
+	procd_open_instance
+	procd_set_param command /sbin/netifd
+	procd_set_param respawn
+	procd_close_instance
+}
+
+reload_service() {
+	ubus call network reload
+	/sbin/wifi down
+	/sbin/wifi up
+}
+
+stop_service() {
+	/sbin/wifi down
+}
+
+service_running() {
+	setup_switch() { return 0; }
+
+	include /lib/network
+	setup_switch
+
+	sleep 5
+
+	/sbin/wifi down
+	/sbin/wifi up
+}
+
+service_triggers()
+{
+	procd_add_reload_trigger "network"
+}
+
+restart() {
+	ifdown -a
+	sleep 1
+	trap '' TERM
+	stop "$@"
+	start "$@"
+}
+
+shutdown() {
+	ifdown -a
+	stop
+}

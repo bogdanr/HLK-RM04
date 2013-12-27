@@ -25,8 +25,7 @@ config interface 'wan'
 config interface 'homelan'
         option proto 'dhcp'
 
-config interface 'admin'
-        option proto 'static'
-        option ipaddr '192.168.22.1'
-        option netmask '255.255.255.0'
+config interface homelan6
+        option ifname   @homelan
+        option proto    'dhcpv6'
 

@@ -1,0 +1,32 @@
+config wifi-device  radio0
+        option type     mac80211
+        option channel  1
+        option hwmode   11ng
+        option path     '10180000.wmac'
+        option htmode   HT20
+        list ht_capab   GF
+        list ht_capab   SHORT-GI-20
+        list ht_capab   SHORT-GI-40
+        list ht_capab   RX-STBC1
+
+###	Use these to connect to your router
+
+config wifi-iface
+        option device   radio0
+        option network  'homelan'
+        option mode     'sta'
+#       option wds      '1'	#	This might not work on many devices as both ends sometimes implement it differently
+        option ssid     'Radulescu'
+        option encryption 'psk2'
+        option key      'crdq2f6qwv'
+
+###	Use these to listen for connections.
+###	In our build we don't even include a DHCP server!
+###	This actually could interfere with the signal so it's disabled by default
+
+#config wifi-iface
+#        option device   radio0
+#        option network  'admin'
+#        option mode     'ap'
+#        option ssid     'SmartSwitch'
+#        option encryption none
